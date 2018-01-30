@@ -1,0 +1,27 @@
+(1) creat_dataset.R
+This file creates four datasets (stored in "data" directory)  
+* a) waveform.RData   
+* d) tcdb_swissprot.RData  
+
+(2) funcs_scott.R
+This implements scott's RKHS method.
+
+(3) funcs_patrasen.R
+This implements patra/sen's isotonic regulariztion method.
+
+(4) funcs.R
+This file contains four functions that wrap up c_storey, c_patrasen, scott and spy methods.
+
+(5) compare_methods_waveform.R
+This code compares different methods using waveform dataset. Below 5 results are stored in 'data' directory:  
+* waveform_vary_feature.RData  
+* waveform_vary_alpha_all.RData  
+* waveform_vary_size_patra_storey.RData  
+* waveform_vary_size_spy.RData  
+* waveform_vary_size_scott.RData  
+
+(6) compare_methods_plot.R
+It uses results from 'compare_methods_waveform.R' to produce figures used in the paper.
+
+(7) compare_methods_tcdb_swissprot.R
+It compares methods using tcdb_swissprot dataset.
