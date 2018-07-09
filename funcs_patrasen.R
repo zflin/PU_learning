@@ -1,23 +1,9 @@
+#################################################################################
+## this code is the implement of patra/sen method. The original code is from
+## http://users.stat.ufl.edu/~rohitpatra/Code/mixmodel.html
+#################################################################################
+
 library(Iso)
-
-PlotDensities <- function(a,scale=rep(1,length(a)),bw="nrd0",xlab="x"){
-    for(ii in 1:length(a)){
-        if(length(a[[ii]]) > 10000) a[[ii]] <- sample(a[[ii]],10000)
-    }
-    ds <- lapply(a,function(x){density(x,bw=bw)})
-    for(ii in 1:length(ds)){
-        ds[[ii]]$y <- scale[ii]*ds[[ii]]$y
-    }
-    xlim <- range(vapply(ds,function(x){range(x$x)},c(0,0)))
-    ylim <- range(vapply(ds,function(x){range(x$y)},c(0,0)))
-    par(mar=c(5,5,1,1))
-    plot(0,0,xlim=xlim,ylim=ylim,col=0,xlab=xlab,ylab="Density")
-    for(ii in 1:length(ds)){
-        points(ds[[ii]]$x,ds[[ii]]$y,type='l',col=ii)
-    }
-    legend("topright",names(a),col=1:length(a),lty=1)
-}
-
 
 ### run non-decreasing least squares
 EstMixMdl <- function(data,FbD,alpha_grid=(1:200)/200){
@@ -81,24 +67,4 @@ EstimateParams <- function(data,FbD,alpha_grid=(1:200)/200){
     return(list(out=out,alpha_hat=alpha_hat,fs=fs,f=f,xs=xs))
 }
 
-
-## training data from two classes, make kde for each class
-## and return classifications
-OneDKDEClassifier <- function(train_cl,train_x,test_x){
-    fb <- density(train_x[train_cl==1])
-    fb <- CreateApproxFun(fb)
-    fs <- density(train_x[train_cl==2])
-    fs <- CreateApproxFun(fs)
-    alpha <- mean(train_cl==2)
-    num <- (1-alpha)*fb(test_x)
-    den <- num + alpha*fs(test_x)
-    return(num/den)
-}
-
-
-ComputeROCCurve <- function(cl,probs){
-    cl_pred <- cl[order(probs,runif(length(probs)),decreasing=TRUE)]
-    return(cbind(cumsum(cl_pred)/sum(cl==1),cumsum(-cl_pred + 1)/sum(cl==0)))
-}
-    
 

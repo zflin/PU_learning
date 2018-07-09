@@ -1,7 +1,20 @@
+#################################################################################
+## this code would create two temporary data sets 
+##      * waveform.RData
+##      * tcdb_swissprot.RData
+#################################################################################
+
+if(!dir.exists("figs")){
+  dir.create("figs")
+}
+if(!dir.exists("data")){
+  dir.create("data")
+}
+
 #============================== data: waveform =============================
 ##' create waveform.RData
-##' dat1 : 
-##' dat2 : 
+##' dat1 : from class == 1
+##' dat2 : from class == 2
 
 rm(list = ls())
 library(mlbench)
@@ -27,14 +40,23 @@ rm(list=ls())
 
 library(devtools)
 
-# dir.create("data")
-# dir.create("data/tcdb_swissprot")
-# download.file("https://raw.github.com/zflin/data/master/tcdb_swissprot/N.zip", 
+if(!dir.exists("data/tcdb_swissprot")){
+  dir.create("data/tcdb_swissprot")
+}
+# download.file("https://raw.github.com/zflin/data/master/tcdb_swissprot/N.zip",
 #               destfile = "data/tcdb_swissprot/N.zip", method = "wget")
-# download.file("https://raw.github.com/zflin/data/master/tcdb_swissprot/P.zip", 
+# download.file("https://raw.github.com/zflin/data/master/tcdb_swissprot/P.zip",
 #               destfile = "data/tcdb_swissprot/P.zip", method = "wget")
-# download.file("https://raw.github.com/zflin/data/master/tcdb_swissprot/Q.zip", 
+# download.file("https://raw.github.com/zflin/data/master/tcdb_swissprot/Q.zip",
 #               destfile = "data/tcdb_swissprot/Q.zip", method = "wget")
+
+download.file("https://github.com/zflin/PU_learning/blob/master/data/tcdb_swissprot/N.zip?raw=true",
+              destfile = "data/tcdb_swissprot/N.zip", method = "wget")
+download.file("https://github.com/zflin/PU_learning/blob/master/data/tcdb_swissprot/P.zip?raw=true",
+              destfile = "data/tcdb_swissprot/P.zip", method = "wget")
+download.file("https://github.com/zflin/PU_learning/blob/master/data/tcdb_swissprot/Q.zip?raw=true",
+              destfile = "data/tcdb_swissprot/Q.zip", method = "wget")
+
 
 unzip("data/tcdb_swissprot/N.zip", exdir = "data/tcdb_swissprot/")
 unzip("data/tcdb_swissprot/P.zip", exdir = "data/tcdb_swissprot/")
@@ -100,12 +122,12 @@ for(ii in 1:n3){
   dat0[ii+n1+n2,feat %in% Q[[ii]]] = 1
 }
 
-tmp = princomp(dat0)
-tmp1 = cumsum(tmp$sdev^2)/sum(tmp$sdev^2)
-plot(tmp1)
+dat0_pca = princomp(dat0)
+cum_rate = cumsum(dat0_pca$sdev^2)/sum(dat0_pca$sdev^2)
+#plot(tmp1)
 k = 200
-tmp1[k]
-dat = tmp$scores[,1:k]
+cum_rate[k]
+dat = dat0_pca$scores[,1:k]
 dat = as.data.frame(dat)
 dat$cl = as.factor(c(rep("labeled",n1),rep("unlabeled",n2+n3)))
 

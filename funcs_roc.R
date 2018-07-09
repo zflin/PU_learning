@@ -1,3 +1,8 @@
+###############################################################################
+## this code is R's implement of ROC method. The original code is from
+## http://web.eecs.umich.edu/~cscott/code/mpe_v2.zip
+###############################################################################
+
 library(MASS)
 library(pdist)
 library(LiblineaR)
@@ -90,7 +95,7 @@ kappahat <- function(posteriors, Y, n1, n2){
   return(s)
 }
 
-cpe <- function(sample1, sample0, train_frac=.2, seed = 2017){
+cpe <- function(sample1, sample0, train_frac=.2, seed = 2017, ncv=5){
   set.seed(seed)
   sample1 = as.matrix(sample1)
   sample0 = as.matrix(sample0)
@@ -135,14 +140,14 @@ cpe <- function(sample1, sample0, train_frac=.2, seed = 2017){
   for(sigma in jaakk_heur*2^seq(-3,1,length.out = 5)){ ## kernel bandwidth
     Z = transformFeatures(Xa/sigma, Omega, beta) ## calculate RFFs
     for(lambda in 10^seq(-2,2,length.out = 5)){
-      cv_idx = cut(sample(na), breaks = 5, labels = F)
-      cv_auc = rep(0,5)
-      for(ii in 1:3){
+      cv_idx = cut(sample(na), breaks = ncv, labels = F)
+      cv_auc = rep(0,ncv)
+      for(ii in 1:ncv){
         Y_train = Ya[cv_idx != ii]
         Z_train = Z[cv_idx != ii,]
         Y_test = Ya[cv_idx == ii]
         Z_test = Z[cv_idx == ii,]
-        model = LiblineaR(Z_train, Y_train, type = 7, cost = 1/lambda)
+        model = LiblineaR(Z_train, Y_train, type = 0, cost = 1/lambda)
         fit = predict(model, Z_test, proba = T)
         eta = fit$probabilities[,1]
         auc.fit = auc(eta, Y_test)
@@ -160,7 +165,7 @@ cpe <- function(sample1, sample0, train_frac=.2, seed = 2017){
   lambda = best_params[1]
   sigma = best_params[2]
   Za = transformFeatures(Xa/sigma, Omega, beta)
-  model = LiblineaR(Za, Ya, type = 7, cost = 1/lambda)
+  model = LiblineaR(Za, Ya, type = 0, cost = 1/lambda)
   
   Z = transformFeatures(X/sigma, Omega, beta)
   Y_fit =  predict(model, Z, proba = T)
