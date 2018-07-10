@@ -88,55 +88,55 @@ names(alpha_est_croc_patrasen) = c('alpha', 'n0', 'grp',
 save(alpha_est_croc_patrasen, file = 'data/waveform_vary_size_croc_patrasen.RData')
 
 ## spy #####
-# set.seed(17)
-# 
-# registerDoParallel(cls)
-# pt = proc.time()
-# alpha_est_spy <- foreach(ii = 1:length(index), .combine = rbind, .packages = c("randomForest")) %dopar% {
-#   alpha = index[[ii]][1]
-#   n0 = index[[ii]][2]
-#   n1 = index[[ii]][3]
-#   m1 = index[[ii]][4]
-#   m2 = index[[ii]][5]
-#   grp = index[[ii]][6]
-#   
-#   x1 = dat1[index[[ii]][7:(6+n1)],]
-#   x0 = rbind(dat1[index[[ii]][(6+n1+1):(6+n1+m1)],], dat2[index[[ii]][((6+n1+m1+1):((6+n1+m1+m2)))],])
-#   
-#   rst5 = method_spy(x0[,-22], x1[,-22]) ## spy
-#   c(alpha, n0, grp, unlist(rst5))
-# }
-# proc.time() - pt ## 732.968
-# stopImplicitCluster()
-# 
-# alpha_est_spy = as.data.frame(alpha_est_spy)
-# names(alpha_est_spy) = c('alpha', 'n0', 'grp', 'alpha5', 'acc5','tb5')
-# save(alpha_est_spy, file = 'data/waveform_vary_size_spy.RData')
+set.seed(17)
+
+registerDoParallel(cls)
+pt = proc.time()
+alpha_est_spy <- foreach(ii = 1:length(index), .combine = rbind, .packages = c("randomForest")) %dopar% {
+  alpha = index[[ii]][1]
+  n0 = index[[ii]][2]
+  n1 = index[[ii]][3]
+  m1 = index[[ii]][4]
+  m2 = index[[ii]][5]
+  grp = index[[ii]][6]
+
+  x1 = dat1[index[[ii]][7:(6+n1)],]
+  x0 = rbind(dat1[index[[ii]][(6+n1+1):(6+n1+m1)],], dat2[index[[ii]][((6+n1+m1+1):((6+n1+m1+m2)))],])
+
+  rst5 = method_spy(x0[,-22], x1[,-22]) ## spy
+  c(alpha, n0, grp, unlist(rst5))
+}
+proc.time() - pt ## 732.968
+stopImplicitCluster()
+
+alpha_est_spy = as.data.frame(alpha_est_spy)
+names(alpha_est_spy) = c('alpha', 'n0', 'grp', 'alpha5', 'acc5','tb5')
+save(alpha_est_spy, file = 'data/waveform_vary_size_spy.RData')
 
 ## roc #####
-# set.seed(17)
-# 
-# registerDoParallel(cls)
-# pt = proc.time()
-# alpha_est_roc <- foreach(ii = 1:length(index), .combine = rbind, .packages = c("MASS","pdist","LiblineaR")) %dopar% {
-#   alpha = index[[ii]][1]
-#   n0 = index[[ii]][2]
-#   n1 = index[[ii]][3]
-#   m1 = index[[ii]][4]
-#   m2 = index[[ii]][5]
-#   grp = index[[ii]][6]
-# 
-#   x1 = dat1[index[[ii]][7:(6+n1)],]
-#   x0 = rbind(dat1[index[[ii]][(6+n1+1):(6+n1+m1)],], dat2[index[[ii]][((6+n1+m1+1):((6+n1+m1+m2)))],])
-# 
-#   rst4 = method_roc(x0[,-22], x1[,-22])
-#   c(alpha, n0, grp, unlist(rst4))
-# }
-# proc.time() - pt ## 3956.811 seconds
-# stopImplicitCluster()
-# alpha_est_roc = as.data.frame(alpha_est_roc)
-# names(alpha_est_roc) = c('alpha', 'n0', 'grp', 'alpha4','acc4','tb4')
-# save(alpha_est_roc, file = 'data/waveform_vary_size_roc.RData')
+set.seed(17)
+
+registerDoParallel(cls)
+pt = proc.time()
+alpha_est_roc <- foreach(ii = 1:length(index), .combine = rbind, .packages = c("MASS","pdist","LiblineaR")) %dopar% {
+  alpha = index[[ii]][1]
+  n0 = index[[ii]][2]
+  n1 = index[[ii]][3]
+  m1 = index[[ii]][4]
+  m2 = index[[ii]][5]
+  grp = index[[ii]][6]
+
+  x1 = dat1[index[[ii]][7:(6+n1)],]
+  x0 = rbind(dat1[index[[ii]][(6+n1+1):(6+n1+m1)],], dat2[index[[ii]][((6+n1+m1+1):((6+n1+m1+m2)))],])
+
+  rst4 = method_roc(x0[,-22], x1[,-22])
+  c(alpha, n0, grp, unlist(rst4))
+}
+proc.time() - pt ## 3956.811 seconds
+stopImplicitCluster()
+alpha_est_roc = as.data.frame(alpha_est_roc)
+names(alpha_est_roc) = c('alpha', 'n0', 'grp', 'alpha4','acc4','tb4')
+save(alpha_est_roc, file = 'data/waveform_vary_size_roc.RData')
 
 
 
