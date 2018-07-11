@@ -44,7 +44,7 @@ alpha_est <- foreach(ii = 1:99, .combine = rbind, .packages = c("randomForest","
   dat$cl <- as.factor(c(rep("labeled",nrow(x1)), rep("unlabeled",nrow(x0))))
   pihat <- mean(dat$cl=="labeled")
 
-  rf.fit <- randomForest(cl~.,data=dat, ntree=500)
+  rf.fit <- randomForest(cl~.,data=dat, ntree=1000)
   rf.preds <- predict(rf.fit,type='prob')
   preds <- rf.preds[,1]
   lu <- rep(0,length(preds))
@@ -54,7 +54,7 @@ alpha_est <- foreach(ii = 1:99, .combine = rbind, .packages = c("randomForest","
 
   cl = c(rep(1,n1),rep(0,n2)) ## true labels in U
 
-  rst3 = method_c_patrasen(p0, p1, cl) ## patra/sen
+  rst3 = method_c_patrasen(p0, p1, cl) ## c-patra/sen
   rst2 = method_c_roc(p0, p1, cl) ## c-roc
 
   c(alpha, unlist(rst2),unlist(rst3))
@@ -129,7 +129,7 @@ alpha_est_roc <- foreach(ii = 1:99, .combine = rbind, .packages = c("pdist", "Li
   x1 = dat1[(n1+1):(n1+m),-kk]
   cl = c(rep(1,n1),rep(0,n2))
 
-  rst4 = method_roc(x0, x1, cl, alpha, nrep = 5) ## ked
+  rst4 = method_roc(x0, x1, cl) ## ked
   c(alpha, unlist(rst4))
 }
 proc.time() - pt ## 2889.328 seconds

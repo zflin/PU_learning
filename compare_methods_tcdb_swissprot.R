@@ -34,9 +34,9 @@ lu[dat$cl=="labeled"] <- 1
 p0 = preds[lu==0]
 p1 = preds[lu==1]
 
-rst2 = method_c_roc(p0, p1, cl, alpha)
-rst3 = method_c_patrasen(p0, p1, cl, alpha, plotit = F)
-rst4 = method_roc(x0, x1, cl, alpha)
+rst2 = method_c_roc(p0, p1, cl)
+rst3 = method_c_patrasen(p0, p1, cl)
+rst4 = method_roc(x0, x1, cl)
 rst5 = method_spy(x0, x1, cl)
 
 ## accuracy on all data, treat all positive samples are correctly classified

@@ -36,7 +36,7 @@ nfeat = ncol(dat) - 1
 alphas_all = rep(0,nfeat)
 ind = (dat$cl == 'labeled')
 for(ii in 1:nfeat){
-  alphas_all[ii] = method_c_patrasen(dat[!ind,ii],dat[ind,ii],cl,alpha,F)[[1]]
+  alphas_all[ii] = method_c_patrasen(dat[!ind,ii],dat[ind,ii],cl)[[1]]
 }
 # plot(alphas_all,ylim=c(0,1))
 # abline(h=alpha,col=2)
@@ -53,9 +53,9 @@ lu <- rep(0,length(preds))
 lu[dat$cl=="labeled"] <- 1
 p0 = preds[lu==0]
 p1 = preds[lu==1]
-rst2 = method_c_roc(p0, p1, cl, alpha)
-rst3 = method_c_patrasen(p0, p1, cl, alpha)
-rst4 = method_roc(x0[,1:nfeat],x1[,1:nfeat],cl,alpha)
+rst2 = method_c_roc(p0, p1, cl)
+rst3 = method_c_patrasen(p0, p1, cl)
+rst4 = method_roc(x0[,1:nfeat],x1[,1:nfeat],cl)
 rst5 = method_spy(x0[,1:nfeat], x1[,1:nfeat], cl) ## spy
 alpha2 = rst2$alpha
 alpha3 = rst3$alpha
