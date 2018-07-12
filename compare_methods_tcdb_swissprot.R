@@ -16,9 +16,9 @@ library(xtable)
 
 load("data/tcdb_swissprot.RData")
 
-n1 = 2453
-n2 = 4558
-n3 = 348
+n1 = 2453 ## P set
+n2 = 4558 ## negative in U set
+n3 = 348 ## positive in U set
 n = n1 + n2 + n3
 
 x1 = dat[1:n1,-ncol(dat)]
@@ -39,20 +39,23 @@ rst3 = method_c_patrasen(p0, p1, cl)
 rst4 = method_roc(x0, x1, cl)
 rst5 = method_spy(x0, x1, cl)
 
-## accuracy on all data, treat all positive samples are correctly classified
-acc2 = (rst2$acc*(n2+n3) + n1)/n
-acc3 = (rst3$acc*(n2+n3) + n1)/n
-acc4 = (rst4$acc*(n2+n3) + n1)/n
-acc5 = (rst5$acc*(n2+n3) + n1)/n
+## accuracy on U set
+acc2 = rst2$acc
+acc3 = rst3$acc
+acc4 = rst4$acc
+acc5 = rst5$acc
 
-f1score2 = 2*(rst2$tb[4]+n1)/(rst2$tb[3]+rst2$tb[2]+2*(rst2$tb[4]+n1))
-f1score3 = 2*(rst3$tb[4]+n1)/(rst3$tb[3]+rst3$tb[2]+2*(rst3$tb[4]+n1))
-f1score4 = 2*(rst4$tb[4]+n1)/(rst4$tb[3]+rst4$tb[2]+2*(rst4$tb[4]+n1))
-f1score5 = 2*(rst5$tb[1]+n1)/(rst5$tb[2]+rst5$tb[3]+2*(rst5$tb[1]+n1))
+## F1 score on U set
+f1score2 = 2*(rst2$tb[4])/(rst2$tb[3]+rst2$tb[2]+2*(rst2$tb[4]))
+f1score3 = 2*(rst3$tb[4])/(rst3$tb[3]+rst3$tb[2]+2*(rst3$tb[4]))
+f1score4 = 2*(rst4$tb[4])/(rst4$tb[3]+rst4$tb[2]+2*(rst4$tb[4]))
+f1score5 = 2*(rst5$tb[1])/(rst5$tb[2]+rst5$tb[3]+2*(rst5$tb[1]))
 
 ## ideal case: 10 fold cross-validation
+## predict only on U set
 dat2 = dat
 dat2$cl = as.factor(c(rep("labeled",n1),rep("unlabeled",n2),rep("labeled",n3)))
+ind_U = c(rep(0,n1), rep(1,n2+n3))
 set.seed(2017)
 folds = c(rep(1:10,n/10+1))
 folds = folds[-1]
@@ -61,7 +64,7 @@ tb = 0
 for(kk in 1:10){
   ind_test = folds == kk
   train = dat2[-ind_test,]
-  test = dat2[ind_test,]
+  test = dat2[which(ind_test)[ind_U[ind_test]==1],]
   rf.fit = randomForest(cl~.,data = train)
   pred = predict(rf.fit, newdata = test, type = "class")
   tb = tb + table(pred,test$cl)
@@ -81,7 +84,6 @@ print(xtable(alpha_est_tcdb, caption = "Comparison of methods for protein signal
              label = "tab:tcdb_swissprot"),type="latex",
       file="figs/comparison_varying_data.tex", include.rownames = T)
 
-#file.copy(from=list.files('figs',full.names=TRUE),to='../ms/figs/',overwrite=TRUE)
 
 
 
