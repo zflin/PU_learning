@@ -2,7 +2,7 @@ A Flexible Procedure for Mixture Proportion Estimation in Positive{Unlabeled Lea
 
 -- by Zhenfeng Lin and James P. Long
 
-This code can reproduce results in above paper. The files are 
+This code reproduces results in above paper. The files are 
 
 * funcs_patrasen.R
 * funcs_roc.R
