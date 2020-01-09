@@ -15,11 +15,6 @@ This code can reproduce results in above paper. The files are
 * swissprot_highdim.R
 * make_plot.R
 * make_table.R
-* waveform_vary_alpha.lsf 
-* waveform_vary_samplesize.lsf
-
-*.lsf can be used to submit files on high performance computer
-to speed up processing. not required.
 
 To run the code, below R packages are required:
 
