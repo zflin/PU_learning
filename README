@@ -49,4 +49,6 @@ Rscript compare_methods_plot.R
 ## generate results for tcdb_swissprot data
 Rscript compare_methods_tcdb_swissprot.R
 
+test
+
 
