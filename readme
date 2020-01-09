@@ -1,0 +1,63 @@
+A Flexible Procedure for Mixture Proportion Estimation in Positive-Unlabeled Learning
+
+-- by Zhenfeng Lin and James P. Long
+
+This code can reproduce results in above paper. The files are 
+
+* raw_data/
+* funcs_patrasen.R
+* funcs_roc.R
+* funcs.R
+* create_dataset.R
+* waveform_vary_samplesize.R
+* waveform_vary_feature.R
+* waveform_vary_alpha.R
+* swissprot_highdim.R
+* make_plot.R
+* make_table.R
+* waveform_vary_alpha.lsf 
+* waveform_vary_samplesize.lsf
+
+*.lsf can be used to submit files on high performance computer
+to speed up processing. not required.
+
+To run the code, below R packages are required:
+
+* mlbench
+* devtools
+* randomForest
+* Iso
+* pdist
+* LiblineaR
+* MASS
+* xtable
+* foreach
+* doParallel
+
+===========================================================================
+
+## place above files in a working directory `PU_learning` (or other name you like).
+## in a terminal in directory `PU_learning`, one can run following commands to 
+## reproduce all results.
+
+## remove compiled data sets and results
+rm -rf figs/
+rm -rf data/ 
+rm -rf results/ 
+
+## create .RData files
+Rscript create_dataset.R
+
+## generate results for waveform data
+Rscript waveform_vary_samplesize.R
+Rscript waveform_vary_feature.R
+Rscript waveform_vary_alpha.R
+Rscript make_plot.R
+
+
+## generate results for tcdb_swissprot data
+Rscript swissprot_highdim.R
+Rscript make_table.R
+
+
+
