@@ -79,12 +79,6 @@ kappahat <- function(posteriors, Y, n1, n2){
   n_roc = length(fp)
   ## Estimate slopes using binomial tail inversion
   delta = .1 ## confidence level
-  ## todo: replace following 6 lines of code and bininv function with 
-  ## numer <- qbeta(1-delta,n2*(1-tp)+1,n2*tp)
-  ## denom <- 1-qbeta(1-delta,n1*fp+1,n1*(1-fp))
-  ## see https://en.wikipedia.org/wiki/Binomial_proportion_confidence_interval#Wilson_score_interval
-  ## pearson-clopper inverval section, basically can do binomial tail inversion with beta quantile
-  ## which requires two lines of code instead of 6 lines + bininv function
   numer = rep(0, n_roc)
   denom = rep(0, n_roc)
   for(ii in 1:n_roc){
